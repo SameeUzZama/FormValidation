@@ -58,10 +58,10 @@ export const RegistrationForm = () => {
           }}
         >
           <Form style={{ width: "20rem" }}>
-            <InputFields label="First Name" name="firstName" type="text" />
-            <InputFields label="last Name" name="lastName" type="text" />
             <InputFields label="Email" name="email" type="email" />
             <InputFields label="Contact" name="contact" type="" />
+            <InputFields label="First Name" name="firstName" type="text" />
+            <InputFields label="last Name" name="lastName" type="text" />
             <InputFields label="password" name="password" type="password" />
             <InputFields
               label="Confirm Password"
