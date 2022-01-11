@@ -8,6 +8,9 @@ export const RegistrationForm = () => {
     /^[\+]?[(]?[0-9]{3}[)]?[-\s\]?[0-9]{3}[-\s\]?[0-9]{4,6}$/im;
   const validate = Yup.object(
     {
+      email: Yup.string()
+        .email("Email is invalid")
+        .required("Email is required"),
       firstName: Yup.string()
         .min(3, "Must be 3 characters or less")
         .max(16, "Must be 16 characters or less")
@@ -16,9 +19,6 @@ export const RegistrationForm = () => {
         .min(3, "Must be 3 characters or less")
         .max(16, "Must be 16 characters or less")
         .required("Required *"),
-      email: Yup.string()
-        .email("Email is invalid")
-        .required("Email is required"),
       contact: Yup.string()
         .min(10, "Enter valid mobile number")
         .required("Phone number is required *")
@@ -29,9 +29,10 @@ export const RegistrationForm = () => {
       confirmPassword: Yup.string()
         .oneOf([Yup.ref("password"), null], "Password must match")
         .required("Confirm password is required *"),
-    }.axios
-      .post("https://api.oopacks.com/api/test/register", validate)
-      .then((response) => (element.innerHTML = response.data.id))
+    }
+    // .axios
+    // .post("https://api.oopacks.com/api/test/register", validate)
+    // .then((response) => (element.innerHTML = response.data.id))
   );
   return (
     <Formik
