@@ -1,48 +1,55 @@
-import React from "react";
-import { Formik, Form } from "formik";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Formik } from "formik";
 import { InputFields } from "./InputFields";
 import * as Yup from "yup";
+import { Col, Form } from "react-bootstrap";
+import "./NavBar.css";
 
 export const RegistrationForm = () => {
-  const phonenumber =
-    /^[\+]?[(]?[0-9]{3}[)]?[-\s\]?[0-9]{3}[-\s\]?[0-9]{4,6}$/im;
-  const validate = Yup.object(
-    {
-      email: Yup.string()
-        .email("Email is invalid")
-        .required("Email is required"),
-      firstName: Yup.string()
-        .min(3, "Must be 3 characters or less")
-        .max(16, "Must be 16 characters or less")
-        .required("Required *"),
-      lastName: Yup.string()
-        .min(3, "Must be 3 characters or less")
-        .max(16, "Must be 16 characters or less")
-        .required("Required *"),
-      contact: Yup.string()
-        .min(10, "Enter valid mobile number")
-        .required("Phone number is required *")
-        .matches(phonenumber, "Inter valid mobile number"),
-      password: Yup.string()
-        .min(6, "Password must be at least 6 charaters")
-        .required("Password is required *"),
-      confirmPassword: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Password must match")
-        .required("Confirm password is required *"),
-    }
-    // .axios
-    // .post("https://api.oopacks.com/api/test/register", validate)
-    // .then((response) => (element.innerHTML = response.data.id))
-  );
+  const [college, setCollege] = useState([]);
+  const [name, setName] = useState("");
+  const [date, setDate] = useState("");
+  const [address, setAddress] = useState("");
+  const [gender, setGender] = useState("");
+  const [cname, setCname] = useState("");
+  const [hobbies, setHobbies] = useState("");
+  const getApiCollege = async () => {
+    const allCollege = await axios.get(
+      "http://universities.hipolabs.com/search?name=middle"
+    );
+    console.log(allCollege.data);
+    setCollege(allCollege.data);
+  };
+
+  const saveData = (e) => {
+    const person = { name, date, address, gender, cname, hobbies };
+    localStorage.setItem("person", JSON.stringify(person));
+  };
+
+  useEffect(() => {
+    getApiCollege();
+  }, []);
+
+  const validate = Yup.object({
+    Name: Yup.string().required("Required *"),
+    DOB: Yup.string().required("Required *"),
+    Address: Yup.string().required("Required *"),
+    gender: Yup.string().required("Required *"),
+    SelectCollege: Yup.string().required("Required *"),
+    Hobbies: Yup.string().required("Required *"),
+    text: Yup.string().required("Required *"),
+  });
   return (
     <Formik
       initialValues={{
-        firstName: "",
-        lastName: "",
-        email: "",
-        contact: "",
-        password: "",
-        confirmPassword: "",
+        Name: "",
+        DOB: "",
+        Address: "",
+        gender: "",
+        SelectCollege: "",
+        Hobbies: "",
+        text: "",
       }}
       validationSchema={validate}
       onSubmit={(values) => {
@@ -57,26 +64,114 @@ export const RegistrationForm = () => {
             alignItems: "center",
           }}
         >
-          <Form style={{ width: "20rem" }}>
-            <InputFields label="Email" name="email" type="email" />
-            <InputFields label="Contact" name="contact" type="" />
-            <InputFields label="First Name" name="firstName" type="text" />
-            <InputFields label="last Name" name="lastName" type="text" />
-            <InputFields label="password" name="password" type="password" />
-            <InputFields
-              label="Confirm Password"
-              name="confirmPassword"
-              type="password"
-            />
-            <button
-              className="btn btn-dark mt-3"
-              type="submit"
-              disabled={!(formik.isValid && formik.dirty)}
-            >
-              Submit
-            </button>
-            {/* <button className="btn btn-danger mt-3 ml-3" type="reset">Reset</button> */}
-          </Form>
+          <div className="main">
+            <Form style={{ width: "20rem" }}>
+              <InputFields
+                label="Name"
+                name="Name"
+                type="text"
+                placeholder="Full Name"
+                // onChange={(e) => setName(e.target.value)}
+              />
+              <InputFields
+                label="Date of birth"
+                name="DOB"
+                type="date"
+                // onChange={(e) => setDate(e.target.value)}
+              />
+              <InputFields
+                label="Address"
+                name="Address"
+                type="text"
+                placeholder="Full Address"
+                // onChange={(e) => setAddress(e.target.value)}
+              />
+              <Form.Group as={Col} controlId="formGridState">
+                <Form.Label>Gender</Form.Label>
+                <Form.Select
+                  defaultValue="Choose..."
+                  // onChange={(e) => setGender(e.target.value)}
+                >
+                  <option>Choose...</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </Form.Select>
+              </Form.Group>
+              <Form.Group as={Col} controlId="formGridState">
+                <Form.Label>College</Form.Label>
+                <Form.Select
+                  defaultValue="Choose..."
+                  // onChange={(e) => setCollege(e.target.value)}
+                >
+                  <option>Select College...</option>
+                  {college.map((item) => {
+                    return (
+                      <option style={{ display: "flex", flexWrap: "wrap" }}>
+                        {item.name}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
+              </Form.Group>
+              <Form>
+                <Form.Label>Hobbies</Form.Label>
+                {["checkbox"].map((type) => (
+                  <div key={`inline-${type}`} className="mb-3">
+                    <Form.Check
+                      inline
+                      label="Reading"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-1`}
+                    />
+                    <Form.Check
+                      inline
+                      label="Gaming"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-2`}
+                    />
+                    <Form.Check
+                      inline
+                      label="Traveling"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-3`}
+                    />
+                    <Form.Check
+                      inline
+                      label="Drawing"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-3`}
+                    />
+                    <Form.Check
+                      inline
+                      label="Other"
+                      name="group1"
+                      type={type}
+                      id={`inline-${type}-3`}
+                    />
+                  </div>
+                ))}
+              </Form>
+              {/* <InputFields
+                className="texthobbies"
+                name="text-Hobbies"
+                type="text"
+                placeholder="Type Your Hobbies"
+                onClick="checkMe()"
+              /> */}
+              <button
+                className="btn btn-dark mt-3"
+                type="submit"
+                onClick={saveData}
+              >
+                Submit
+              </button>
+            </Form>
+          </div>
         </div>
       )}
     </Formik>

@@ -1,13 +1,10 @@
 import "./App.css";
-import { RegistrationForm } from "./components/RegistrationForm";
+import Landing from "./components/Landing";
 
 function App() {
   return (
     <div className="app">
-      <center>
-        <h1>Registration Form</h1>
-      </center>
-      <RegistrationForm />
+      <Landing />
     </div>
   );
 }

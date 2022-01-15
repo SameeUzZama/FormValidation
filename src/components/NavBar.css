@@ -1,0 +1,33 @@
+.NavBar {
+  background-color: #151d58;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.new {
+  width: 200px;
+  text-decoration: none;
+  color: #43bee5;
+  font-size: 25px;
+  margin-right: 100px;
+}
+.user-anchor {
+  width: 200px;
+  font-size: 25px;
+  text-decoration: none;
+  margin-left: 50px;
+  color: #43bee5;
+}
+.main {
+  background-color: rgb(147, 211, 88);
+  border-radius: 10px solid black;
+  padding: 10px;
+  border-radius: 20px;
+}
+.texthobbies {
+  display: none;
+}
